@@ -1,0 +1,36 @@
+# Project Log Book
+
+17/07/2026 15:23:43
+- Scaffolded project structure (folders and __init__.py files).
+- Created requirements.txt and installed playwright, pandas, pytest, pytest-playwright.
+- Created action/browser_setup.py for initial Playwright test.
+- Created perception/dom_extractor.py to inject JS and extract interactive DOM elements with visual highlighting.
+- Created tests/test_perception.py to verify DOM extraction.
+- Created conftest.py to fix pytest module resolution.
+
+17/07/2026 15:26:11
+- Updated tests/test_perception.py to use generic assertions so the test passes dynamically on any website (e.g. Google, Amazon).
+- Fixed UnicodeEncodeError in tests/test_perception.py to safely print special characters on Windows terminals.
+
+20/07/2026 11:06:00
+- Added google-genai to requirements.txt.
+- Created reasoning/llm_reasoner.py to connect to the Gemini API and force structured JSON outputs.
+- Created tests/test_reasoning.py to verify the LLM can successfully reason about a mock webpage.
+
+20/07/2026 11:29:05
+- Updated reasoning/llm_reasoner.py to use `gemini-1.5-flash` instead of 2.5-flash to resolve 404 model availability error.
+
+20/07/2026 12:19:19
+- Created action/playwright_executor.py to physically translate LLM JSON decisions into real clicks and typing.
+- Built agent_loop.py which orchestrates the entire continuous loop (Perception -> Reasoning -> Action).
+
+20/07/2026 14:24:11
+- Fixed bug in perception/dom_extractor.py where the LLM would get stuck in an infinite loop because it couldn't see the text it just typed into input fields. Added explicit `(current value: ...)` to the DOM summary.
+
+21/07/2026 12:05:00
+- Implemented Week 5 Error Handling: Modified playwright_executor.py to return detailed success/error strings instead of booleans.
+- Gave the agent Short-Term Memory: Modified agent_loop.py and llm_reasoner.py to feed the status of the previous action back into Gemini's prompt so it can correct its own mistakes.
+- Replaced hardcoded `time.sleep` with `page.wait_for_load_state("networkidle")` to make page scanning far more robust.
+
+21/07/2026 12:41:57
+- Added a new `type_and_enter` action to `reasoning/llm_reasoner.py` and `action/playwright_executor.py` so the agent can physically press the Enter key on search bars (e.g. Google).
