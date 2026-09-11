@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUI's Agent — Control Dashboard</title>
+    <!-- Modern Google Font: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="background-glow"></div>
+    
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="navbar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m12 8 4 4-4 4M8 12h8"/></svg>
+                </div>
+                <div>
+                    <h1>JUI's Agent</h1>
+                    <span class="version-tag">Agentic Browser Automation v2.0</span>
+                </div>
+            </div>
+            <div class="connection-badge" id="ws-status">
+                <span class="status-dot disconnected"></span>
+                <span id="ws-status-text">Disconnected</span>
+            </div>
+        </header>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main class="dashboard-grid">
+            
+            <!-- LEFT PANEL: CONTROLS & PROMPTING -->
+            <section class="panel glass-panel">
+                <div class="panel-header">
+                    <h2>Mission Control</h2>
+                    <span class="badge">Configuration</span>
+                </div>
+
+                <!-- PROMPT TEMPLATES CHIPS -->
+                <div class="control-group">
+                    <label class="input-label">Quick Prompt Templates</label>
+                    <div class="chips-grid">
+                        <button class="chip" data-url="https://www.saucedemo.com" data-goal="Log in with username 'standard_user' and password 'secret_sauce', then click on the login button.">
+                            SauceDemo Login
+                        </button>
+                        <button class="chip" data-url="https://en.wikipedia.org" data-goal="Search for 'Artificial Intelligence'.">
+                            Wikipedia Search
+                        </button>
+                        <button class="chip" data-url="https://the-internet.herokuapp.com/add_remove_elements/" data-goal="Click the 'Add Element' button exactly 3 times.">
+                            Heroku Counter
+                        </button>
+                        <button class="chip" data-url="https://www.google.com" data-goal="Search for 'Web Automation Agents'.">
+                            Google Search
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STARTING URL INPUT -->
+                <div class="control-group">
+                    <label class="input-label" for="url-input">Target Web Address (URL)</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <input type="url" id="url-input" placeholder="https://example.com" value="https://www.saucedemo.com" required>
+                    </div>
+                </div>
+
+                <!-- GOAL PROMPT TEXTAREA -->
+                <div class="control-group">
+                    <label class="input-label" for="goal-input">Agent Goal & Instruction (Plain English)</label>
+                    <div class="input-wrapper">
+                        <textarea id="goal-input" rows="4" placeholder="Describe what the agent should accomplish on the webpage..." required>Log in with the username 'standard_user' and the password 'secret_sauce', and then click on the login button.</textarea>
+                    </div>
+                </div>
+
+                <!-- PERCEPTION MODE SELECTOR -->
+                <div class="control-group">
+                    <label class="input-label">Perception Mode</label>
+                    <div class="radio-cards">
+                        <label class="radio-card active" id="mode-hybrid-label">
+                            <input type="radio" name="mode" value="hybrid" checked>
+                            <div class="radio-content">
+                                <span class="title">Hybrid Engine</span>
+                                <span class="desc">DOM speed + Vision fallback (Recommended)</span>
+                            </div>
+                        </label>
+                        <label class="radio-card" id="mode-dom-label">
+                            <input type="radio" name="mode" value="dom">
+                            <div class="radio-content">
+                                <span class="title">DOM Mode</span>
+                                <span class="desc">Pure HTML text parsing</span>
+                            </div>
+                        </label>
+                        <label class="radio-card" id="mode-vision-label">
+                            <input type="radio" name="mode" value="vision">
+                            <div class="radio-content">
+                                <span class="title">Vision Mode</span>
+                                <span class="desc">Multimodal Screenshot AI</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="actions-wrapper">
+                    <button class="btn btn-primary" id="launch-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <span>Launch Autonomous Agent</span>
+                    </button>
+                </div>
+
+            </section>
+
+            <!-- RIGHT PANEL: LIVE EXECUTION FEED & STATS -->
+            <section class="panel glass-panel">
+                <div class="panel-header">
+                    <h2>Execution Feed</h2>
+                    <div class="agent-state-badge" id="agent-state">
+                        <span class="pulse-ring"></span>
+                        <span id="agent-state-text">Ready</span>
+                    </div>
+                </div>
+
+                <!-- ALERT BANNER FOR CAPTCHAS -->
+                <div class="alert-banner hidden" id="captcha-alert">
+                    <div class="alert-content">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <div>
+                            <strong id="captcha-title">CAPTCHA / Security Challenge Active</strong>
+                            <p id="captcha-msg">Please solve the CAPTCHA in the opened browser window, then press ENTER in your terminal to continue.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE STEPS CARDS FEED -->
+                <div class="feed-container" id="feed-container">
+                    <div class="empty-state" id="empty-feed">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>
+                        <h3>Agent Idle</h3>
+                        <p>Configure a goal and click Launch Autonomous Agent to begin.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

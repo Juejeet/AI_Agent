@@ -1,2 +1,20 @@
 [
+  {
+    "id": "saucedemo_login",
+    "url": "https://www.saucedemo.com",
+    "goal": "Log in with the username 'standard_user' and the password 'secret_sauce', and then click on the login button.",
+    "expected_url_contains": "inventory.html"
+  },
+  {
+    "id": "wikipedia_search",
+    "url": "https://en.wikipedia.org",
+    "goal": "Search for 'Artificial Intelligence'.",
+    "expected_url_contains": "https://en.wikipedia.org/wiki/Artificial_intelligence"
+  },
+  {
+    "id": "internet_add_element",
+    "url": "https://the-internet.herokuapp.com/add_remove_elements/",
+    "goal": "Click the 'Add Element' button exactly 3 times, then you are done.",
+    "expected_url_contains": "add_remove_elements"
+  }
 ]

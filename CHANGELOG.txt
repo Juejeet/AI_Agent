@@ -34,3 +34,44 @@
 
 21/07/2026 12:41:57
 - Added a new `type_and_enter` action to `reasoning/llm_reasoner.py` and `action/playwright_executor.py` so the agent can physically press the Enter key on search bars (e.g. Google).
+
+22/07/2026 11:41:00
+- Implemented Week 6 Evaluation Suite: Refactored `agent_loop.py` to return structured success data instead of just printing.
+- Built `eval/tasks.json` to store 3 benchmark tasks (SauceDemo, Wikipedia, HerokuApp).
+- Built `eval/run_eval.py` to automatically loop through the tasks and print a Pandas report card, saving logs to `logs/eval_TIMESTAMP.csv`.
+
+22/07/2026 12:31:00
+- Implemented Human-in-the-Loop (HITL) CAPTCHA Detection & Handoff: Added `check_for_captcha()` in `perception/dom_extractor.py` and updated `agent_loop.py` to pause execution and prompt the user in terminal whenever a CAPTCHA is encountered.
+
+23/07/2026 12:10:00
+- Implemented Weeks 7-8 Vision-Based Perception:
+  - Built `perception/vision_extractor.py` to annotate page elements and capture full-viewport screenshots.
+  - Built `reasoning/vision_reasoner.py` using Gemini Multimodal Vision API to reason over screenshots instead of HTML code.
+  - Updated `agent_loop.py` to support toggling between `perception_mode="dom"` and `perception_mode="vision"`.
+  - Created `eval/compare_eval.py` to run side-by-side benchmark evaluations comparing DOM vs. Vision perception performance.
+
+23/07/2026 12:38:00
+- Implemented Weeks 9-10 Hybrid Perception Engine & Final Project Completion:
+  - Added `perception_mode="hybrid"` to `agent_loop.py` with automatic Vision fallback triggers when DOM is empty or when consecutive action errors occur.
+  - Created `eval/final_findings.md` documenting complete technical architecture, empirical trade-off evaluation (DOM vs Vision vs Hybrid), and project conclusions.
+  - Completed 10-week development roadmap!
+
+24/07/2026 12:45:00
+- Fixed Cloudflare CAPTCHA false-positive bug: Updated `check_for_captcha()` in `perception/dom_extractor.py` to check `is_visible()` instead of `.count() > 0`, preventing completed/hidden Cloudflare iframes from repeatedly pausing the loop or causing premature task completion.
+
+24/07/2026 13:08:00
+- Comprehensive Cloudflare Detection & Premature Exit Guard:
+  - Expanded `check_for_captcha()` in `perception/dom_extractor.py` to check page title keywords ("just a moment", "cloudflare", etc.), `#challenge-stage`, `.cf-turnstile` containers, and challenge text.
+  - Added premature exit guard in `agent_loop.py` to override `DONE` decisions if a CAPTCHA is active on screen, forcing terminal pause.
+
+29/07/2026 15:09:00
+- Added Plain-English `final_answer` Summary Extraction:
+  - Updated `reasoning/llm_reasoner.py` and `reasoning/vision_reasoner.py` JSON schemas to require a `final_answer` field when `action_type == "done"`.
+  - Updated `agent_loop.py` to print and return `final_answer` in the final outcome dictionary.
+
+29/07/2026 12:50:00
+- Built Option B Interactive Web Dashboard:
+  - Added `fastapi`, `uvicorn`, and `websockets` to `requirements.txt`.
+  - Updated `agent_loop.py` to support `step_callback` for real-time WebSocket step streaming.
+  - Built `server.py` FastAPI server to host the Web UI and handle WebSockets.
+  - Built `static/index.html`, `static/style.css`, and `static/app.js` featuring a glassmorphic dark-mode interface with Prompt Template Chips, Perception Selector, Live Action Step Cards, and CAPTCHA alert banners.

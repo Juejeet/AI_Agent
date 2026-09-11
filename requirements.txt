@@ -3,3 +3,8 @@ pandas
 pytest
 pytest-playwright
 google-genai
+python-dotenv
+pandas
+fastapi
+uvicorn
+websockets

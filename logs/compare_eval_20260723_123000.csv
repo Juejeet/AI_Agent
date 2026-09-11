@@ -1,0 +1,7 @@
+Mode,Task ID,Steps,Time (s),Agent Claimed Success,Verified Success
+DOM,saucedemo_login,4,13.38,True,True
+DOM,wikipedia_search,2,80.88,True,True
+DOM,internet_add_element,4,14.88,True,True
+VISION,saucedemo_login,4,19.98,True,True
+VISION,wikipedia_search,2,82.28,True,True
+VISION,internet_add_element,4,19.71,True,True
